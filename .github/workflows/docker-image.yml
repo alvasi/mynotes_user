@@ -1,72 +1,72 @@
-# name: Docker Image CI
+name: Docker Image CI
 
-# on:
-#   push:
-#     branches: [ "main" ]
+on:
+  push:
+    branches: [ "main" ]
 
-# jobs:
-#   python-formatting:
-#     runs-on: ubuntu-latest
+jobs:
+  python-formatting:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-#       - name: Setup Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.8'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
 
-#       - name: Install Black
-#         run: pip install black
+      - name: Install Black
+        run: pip install black
 
-#       - name: Run Black
-#         run: black --check app.py
+      - name: Run Black
+        run: black --check app.py
 
-#   db_connection_test:
-#     needs: python-formatting
-#     runs-on: ubuntu-latest
+  db_connection_test:
+    needs: python-formatting
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Check out repository code
-#         uses: actions/checkout@v3
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v2
-#         with:
-#           python-version: '3.8'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
 
-#       - name: Install dependencies
-#         run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-#       - name: Run DB connection test
-#         env: 
-#           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-#         run: |
-#           python -m unittest app_test.py
+      - name: Run DB connection test
+        env: 
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          python -m unittest app_test.py
 
-#   build:
-#     needs: db_connection_test  # build only runs if test is successful
-#     runs-on: ubuntu-latest
+  build:
+    needs: db_connection_test  # build only runs if test is successful
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
       
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
       
-#       - name: Login to GitHub Container Registry
-#         uses: docker/login-action@v1
-#         with:
-#           registry: ghcr.io
-#           username: ${{ github.actor }}
-#           password: ${{ secrets.DEADLINE_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.USER_TOKEN }}
       
-#       - name: Build and push
-#         uses: docker/build-push-action@v2
-#         with:
-#           context: .
-#           file: ./Dockerfile
-#           push: true
-#           tags: ghcr.io/alvasi/userlogin-api:latest
-#           platforms: linux/amd64
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/alvasi/mynotes_user/userlogin-api:latest
+          platforms: linux/amd64
