@@ -1,8 +1,7 @@
 import unittest
 import psycopg2 as psycopg
 from dotenv import load_dotenv
-from app import app, get_db_connection
-from flask import json
+from app import get_db_connection
 
 # Load environment variables from .env file
 load_dotenv()
