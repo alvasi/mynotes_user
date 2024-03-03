@@ -68,5 +68,5 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/alvasi/mynotes_user/userlogin-api:latest
+          tags: ghcr.io/alvasi/userlogin-api:latest
           platforms: linux/amd64
