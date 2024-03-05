@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: userlogin
+  namespace: namespace-workflow-1709653339175
+spec:
+  type: LoadBalancer
+  selector:
+    app: userlogin
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
