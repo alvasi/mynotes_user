@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userlogin
+  labels:
+    app: userlogin
+  namespace: namespace-workflow-1709653339175
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userlogin
+  template:
+    metadata:
+      labels:
+        app: userlogin
+    spec:
+      containers:
+        - name: userlogin
+          image: mynotes.azurecr.io/userlogin:latest
+          ports:
+            - containerPort: 5000
