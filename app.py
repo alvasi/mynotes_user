@@ -84,5 +84,29 @@ def login():
     return jsonify(user), 200
 
 
+@app.route("/delete_account", methods=["POST"])
+def delete_account():
+    data = request.get_json()
+    username = data.get("username")
+
+    if not username:
+        return jsonify("Missing username"), 400
+
+    connection = get_db_connection()
+    if connection:
+        try:
+            cursor = connection.cursor()
+            sql_command = "DELETE FROM notes_user_2 WHERE userid = %s"
+            cursor.execute(sql_command, (username,))
+            connection.commit()
+            return jsonify("Account deleted"), 200
+        except (Exception, psycopg.Error) as error:
+            print("Error deleting account: ", error)
+        finally:
+            connection.close()
+    else:
+        return jsonify("Failed to connect to the database"), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True)

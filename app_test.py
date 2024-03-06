@@ -56,6 +56,16 @@ class FlaskAppTestCase(unittest.TestCase):
         mock_cursor.rowcount = 0  # Simulate a failed login
         return mock_conn
 
+        # Mock setups for delete_account
+
+    def mock_delete_account_success():
+        mock_conn = MagicMock()
+        mock_cursor = MagicMock()
+        mock_conn.cursor.return_value = mock_cursor
+        # Simulate a successful delete operation
+        mock_cursor.rowcount = 1  # Rowcount reflects the number of rows deleted
+        return mock_conn
+
     @patch("app.get_db_connection", side_effect=mock_get_db_connection_success)
     def test_register_submit(self, mock_get_db_connection):
         response = self.client.post(
@@ -88,6 +98,12 @@ class FlaskAppTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 404)
         data = json.loads(response.data)
         self.assertEqual(data, "Wrong username or password")
+
+    @patch("app.get_db_connection", side_effect=mock_delete_account_success)
+    def test_delete_account_success(self, mock_get_db_connection):
+        # Assuming the user "johndoe" exists and the deletion is successful
+        response = self.client.post("/delete_account", json={"username": "johndoe"})
+        self.assertEqual(response.status_code, 200)
 
 
 if __name__ == "__main__":
