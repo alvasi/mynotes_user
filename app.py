@@ -8,7 +8,6 @@ app = Flask(__name__)
 DB_HOST = "db.doc.ic.ac.uk"
 DB_USER = "sf23"
 DB_PASSWORD = os.environ.get("DB_PASSWORD")
-DB_NAME = "sf23"
 DB_PORT = "5432"
 
 
